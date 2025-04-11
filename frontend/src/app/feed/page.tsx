@@ -1,10 +1,10 @@
+import FetchUsers from '@/components/FetchUsers'
 import Header from '@/components/Header'
 import React from 'react'
 function Feeds() {
   return (
     <>
     <Header/>
-
     </>
   )
 }
