@@ -6,7 +6,8 @@ export default function configurePassport(passport) {
       {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: '/api/auth/google/callback',
+        callbackURL: process.env.CALLBACK_URL,
+        scope: ['profile', 'email'],
       },
       async (accessToken, refreshToken, profile, done) => {
         try {
