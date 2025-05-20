@@ -1,7 +1,9 @@
 import React from 'react';
-
 function Feeds() {
-  return <div>Feeds</div>;
+  return (
+    <>
+    </>
+  );
 }
 
 export default Feeds;
