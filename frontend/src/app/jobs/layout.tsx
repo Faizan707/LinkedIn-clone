@@ -4,9 +4,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen">
       <Navbar />
-      <main className="mx-auto w-[1000px] mt-4">
-        {children}
-      </main>
+      <main className="mx-auto mt-4 w-[1000px]">{children}</main>
     </div>
   );
 }
