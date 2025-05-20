@@ -1,9 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 function MyNetwork() {
-  return (
-    <div>MyNetwork</div>
-  )
+  return <div>MyNetwork</div>;
 }
 
-export default MyNetwork
+export default MyNetwork;
