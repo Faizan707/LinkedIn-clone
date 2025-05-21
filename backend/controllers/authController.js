@@ -14,7 +14,7 @@ export const signup = async (req, res) => {
 
     user.password = undefined;
 
-    res.status(201).json({  message:"user created successfully" }); 
+    res.status(201).json({  message:"user created successfully" },user); 
   } catch (err) {
     res.status(500).json({ msg: err.message });
   }

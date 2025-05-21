@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-
+import { setCookie } from 'cookies-next/client';
 export default function GoogleSuccess() {
   const router = useRouter();
 
@@ -11,7 +11,12 @@ export default function GoogleSuccess() {
     const token = urlParams.get('token');
 
     if (token) {
-      localStorage.setItem('token', token);
+      setCookie('token', token, {
+        maxAge: 60 * 60 * 24,
+        path: '/',
+        secure: true,
+        sameSite: 'lax',
+      });
       router.push('/feeds');
     } else {
       router.push('/login');
