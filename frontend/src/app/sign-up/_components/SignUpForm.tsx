@@ -1,17 +1,17 @@
-'use client'
+'use client';
 
-import React from 'react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { SignupSchema,SignupSchemaType } from '@/lib/schema'
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { SignupSchema, SignupSchemaType } from '@/lib/schema';
 
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import GoogleSignUpButton from './GoogleSignUpButton'
-import Link from 'next/link'
-import axiosInstance from '@/lib/axios'
-import { useRouter } from 'next/navigation'
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import GoogleSignUpButton from './GoogleSignUpButton';
+import Link from 'next/link';
+import axiosInstance from '@/lib/axios';
+import { useRouter } from 'next/navigation';
 function SignUpForm() {
   const {
     register,
@@ -20,20 +20,17 @@ function SignUpForm() {
     formState: { errors },
   } = useForm<SignupSchemaType>({
     resolver: zodResolver(SignupSchema),
-  })
-  const router = useRouter()
-const onSubmit = async (data: SignupSchemaType) => {
-  console.log("Form Data:", data);
-
-  try {
-    const response = await axiosInstance.post('/api/auth/signup', data);
-    reset()
-    router.push('sign-in')
-} catch (error: any) {
-    console.error("Signup failed:", error.response?.data || error.message);
-  }
-};
-
+  });
+  const router = useRouter();
+  const onSubmit = async (data: SignupSchemaType) => {
+    try {
+      const response = await axiosInstance.post('/api/auth/signup', data);
+      reset();
+      router.push('sign-in');
+    } catch (error: any) {
+      console.error('Signup failed:', error.response?.data || error.message);
+    }
+  };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-50 to-blue-100 p-4">
@@ -49,7 +46,7 @@ const onSubmit = async (data: SignupSchemaType) => {
               <Input
                 type="text"
                 placeholder="Enter your name"
-                {...register("name")}
+                {...register('name')}
               />
               {errors.name && (
                 <p className="text-sm text-red-500">{errors.name.message}</p>
@@ -59,22 +56,23 @@ const onSubmit = async (data: SignupSchemaType) => {
               <Input
                 type="email"
                 placeholder="Enter your email"
-                {...register("email")}
+                {...register('email')}
               />
               {errors.email && (
                 <p className="text-sm text-red-500">{errors.email.message}</p>
               )}
             </div>
 
-
             <div>
               <Input
                 type="password"
                 placeholder="Enter your password"
-                {...register("password")}
+                {...register('password')}
               />
               {errors.password && (
-                <p className="text-sm text-red-500">{errors.password.message}</p>
+                <p className="text-sm text-red-500">
+                  {errors.password.message}
+                </p>
               )}
             </div>
 
@@ -97,7 +95,7 @@ const onSubmit = async (data: SignupSchemaType) => {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
 
-export default SignUpForm
+export default SignUpForm;

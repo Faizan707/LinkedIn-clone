@@ -172,13 +172,13 @@ export default function Home() {
               asChild
               className="transform rounded-lg bg-blue-600 px-8 py-3 font-semibold text-white shadow-md transition-all duration-300 hover:-translate-y-1 hover:bg-blue-700"
             >
-              <Link href="/signup">Join Now</Link>
+              <Link href="/sign-up">Join Now</Link>
             </Button>
             <Button
               asChild
               className="transform rounded-lg border-2 border-blue-600 bg-transparent px-8 py-3 font-semibold text-blue-600 transition-all duration-300 hover:-translate-y-1 hover:bg-white"
             >
-              <Link href="/learn-more">Learn More</Link>
+              <Link href="#">Learn More</Link>
             </Button>
           </motion.div>
         </div>
