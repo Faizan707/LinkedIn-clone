@@ -1,13 +1,45 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { IoHome, IoSearch } from 'react-icons/io5';
 import { BsFillPeopleFill, BsSuitcaseLgFill } from 'react-icons/bs';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { getCookie } from 'cookies-next';
+import { jwtDecode } from 'jwt-decode';
+import Image from 'next/image';
+import { IoMdArrowDropdown } from 'react-icons/io';
+
+type DecodedTokenType = {
+  id: string;
+  email: string;
+  name: string;
+  avatar: string;
+  iat: number;
+  exp: number;
+};
 
 function Navbar() {
   const pathname = usePathname();
+  const [decodedToken, setDecodedToken] = useState<DecodedTokenType | null>(
+    null
+  );
+
+  const getToken = () => {
+    const token = getCookie('token') as string | undefined;
+
+    if (token) {
+      const decoded = jwtDecode<DecodedTokenType & { avatar: any }>(token);
+
+      setDecodedToken(decoded);
+    } else {
+      console.warn('Token not found in cookies.');
+    }
+  };
+
+  useEffect(() => {
+    getToken();
+  }, []);
 
   return (
     <nav className="border-b border-gray-200 bg-white py-2 shadow-sm">
@@ -35,10 +67,16 @@ function Navbar() {
           <div className="group flex flex-col items-center">
             <Link href="/feeds" className="flex flex-col items-center">
               <IoHome
-                className={`h-6 w-6 ${pathname === '/feeds' ? 'text-gray-800' : 'text-gray-500'} transition-colors group-hover:text-gray-800`}
+                className={`h-6 w-6 ${
+                  pathname === '/feeds' ? 'text-gray-800' : 'text-gray-500'
+                } transition-colors group-hover:text-gray-800`}
               />
               <span
-                className={`text-sm ${pathname === '/feeds' ? 'font-semibold text-gray-800' : 'text-gray-500'} transition-colors group-hover:text-gray-800`}
+                className={`text-sm ${
+                  pathname === '/feeds'
+                    ? 'font-semibold text-gray-800'
+                    : 'text-gray-500'
+                } transition-colors group-hover:text-gray-800`}
               >
                 Home
               </span>
@@ -50,10 +88,16 @@ function Navbar() {
           <div className="group flex flex-col items-center">
             <Link href="/my-network" className="flex flex-col items-center">
               <BsFillPeopleFill
-                className={`h-6 w-6 ${pathname === '/my-network' ? 'text-gray-800' : 'text-gray-500'} transition-colors group-hover:text-gray-800`}
+                className={`h-6 w-6 ${
+                  pathname === '/my-network' ? 'text-gray-800' : 'text-gray-500'
+                } transition-colors group-hover:text-gray-800`}
               />
               <span
-                className={`text-sm ${pathname === '/my-network' ? 'font-semibold text-gray-800' : 'text-gray-500'} transition-colors group-hover:text-gray-800`}
+                className={`text-sm ${
+                  pathname === '/my-network'
+                    ? 'font-semibold text-gray-800'
+                    : 'text-gray-500'
+                } transition-colors group-hover:text-gray-800`}
               >
                 My Network
               </span>
@@ -65,10 +109,16 @@ function Navbar() {
           <div className="group flex flex-col items-center">
             <Link href="/jobs" className="flex flex-col items-center">
               <BsSuitcaseLgFill
-                className={`h-6 w-6 ${pathname === '/jobs' ? 'text-gray-800' : 'text-gray-500'} transition-colors group-hover:text-gray-800`}
+                className={`h-6 w-6 ${
+                  pathname === '/jobs' ? 'text-gray-800' : 'text-gray-500'
+                } transition-colors group-hover:text-gray-800`}
               />
               <span
-                className={`text-sm ${pathname === '/jobs' ? 'font-semibold text-gray-800' : 'text-gray-500'} transition-colors group-hover:text-gray-800`}
+                className={`text-sm ${
+                  pathname === '/jobs'
+                    ? 'font-semibold text-gray-800'
+                    : 'text-gray-500'
+                } transition-colors group-hover:text-gray-800`}
               >
                 Jobs
               </span>
@@ -76,6 +126,24 @@ function Navbar() {
             {pathname === '/jobs' && (
               <div className="mt-1 h-0.5 w-6 rounded-full bg-black"></div>
             )}
+          </div>
+          <div className="flex flex-col items-center">
+            {decodedToken?.avatar ? (
+              <Image
+                src={decodedToken.avatar}
+                alt={`${decodedToken.name}'s avatar`}
+                width={40}
+                height={40}
+                className="rounded-full object-cover"
+              />
+            ) : (
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-300 font-semibold text-white">
+                {decodedToken?.name?.charAt(0).toUpperCase() || 'U'}
+              </div>
+            )}
+            <p className="flex items-center text-sm text-gray-400 hover:cursor-pointer">
+              Me <IoMdArrowDropdown />
+            </p>
           </div>
         </div>
       </div>

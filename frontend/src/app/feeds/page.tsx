@@ -1,6 +1,14 @@
-import React from 'react';
+
+
+
+
 function Feeds() {
-  return <></>;
+
+   
+  return <>
+  
+  
+  </>;
 }
 
 export default Feeds;

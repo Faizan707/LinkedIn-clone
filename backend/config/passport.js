@@ -1,5 +1,6 @@
 import User from '../model/user.model.js';
 import GoogleStrategy from 'passport-google-oauth20';
+import cloudinary from './cloudinary.js';
 export default function configurePassport(passport) {
   passport.use(
     new GoogleStrategy(
@@ -13,12 +14,15 @@ export default function configurePassport(passport) {
         try {
           const existingUser = await User.findOne({ googleId: profile.id });
           if (existingUser) return done(null, existingUser);
-
+          const imageURL = profile.photos[0].value;
+          const uploadResult = await cloudinary.uploader.upload(imageURL, {
+            folder: 'users/profile_images',
+          });
           const newUser = await User.create({
             name: profile.displayName,
             email: profile.emails[0].value,
             googleId: profile.id,
-            avatar: profile.photos[0].value,
+            avatar: uploadResult.secure_url,
           });
 
           return done(null, newUser);

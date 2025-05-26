@@ -19,6 +19,7 @@
     "clsx": "^2.1.1",
     "cobe": "^0.6.3",
     "cookies-next": "^5.1.0",
+    "jwt-decode": "^4.0.0",
     "lucide-react": "^0.511.0",
     "motion": "^12.12.1",
     "next": "15.3.2",
