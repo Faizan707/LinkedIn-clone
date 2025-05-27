@@ -9,29 +9,19 @@ import { getCookie } from 'cookies-next';
 import { jwtDecode } from 'jwt-decode';
 import Image from 'next/image';
 import { IoMdArrowDropdown } from 'react-icons/io';
-
-type DecodedTokenType = {
-  id: string;
-  email: string;
-  name: string;
-  avatar: string;
-  iat: number;
-  exp: number;
-};
+import { DecodedTokenType } from '@/lib/types';
+import { useUserStore } from '@/store/useUserStore';
 
 function Navbar() {
+  const { user, setUser } = useUserStore();
+
   const pathname = usePathname();
-  const [decodedToken, setDecodedToken] = useState<DecodedTokenType | null>(
-    null
-  );
 
   const getToken = () => {
     const token = getCookie('token') as string | undefined;
-
     if (token) {
-      const decoded = jwtDecode<DecodedTokenType & { avatar: any }>(token);
-
-      setDecodedToken(decoded);
+      const decoded = jwtDecode<DecodedTokenType>(token);
+      setUser(decoded);
     } else {
       console.warn('Token not found in cookies.');
     }
@@ -63,82 +53,61 @@ function Navbar() {
             />
           </div>
         </div>
+
         <div className="flex items-center gap-6">
-          <div className="group flex flex-col items-center">
-            <Link href="/feeds" className="flex flex-col items-center">
-              <IoHome
-                className={`h-6 w-6 ${
-                  pathname === '/feeds' ? 'text-gray-800' : 'text-gray-500'
-                } transition-colors group-hover:text-gray-800`}
-              />
-              <span
-                className={`text-sm ${
-                  pathname === '/feeds'
-                    ? 'font-semibold text-gray-800'
-                    : 'text-gray-500'
-                } transition-colors group-hover:text-gray-800`}
-              >
-                Home
-              </span>
-            </Link>
-            {pathname === '/feeds' && (
-              <div className="mt-1 h-0.5 w-6 rounded-full bg-black"></div>
-            )}
-          </div>
-          <div className="group flex flex-col items-center">
-            <Link href="/my-network" className="flex flex-col items-center">
-              <BsFillPeopleFill
-                className={`h-6 w-6 ${
-                  pathname === '/my-network' ? 'text-gray-800' : 'text-gray-500'
-                } transition-colors group-hover:text-gray-800`}
-              />
-              <span
-                className={`text-sm ${
-                  pathname === '/my-network'
-                    ? 'font-semibold text-gray-800'
-                    : 'text-gray-500'
-                } transition-colors group-hover:text-gray-800`}
-              >
-                My Network
-              </span>
-            </Link>
-            {pathname === '/my-network' && (
-              <div className="mt-1 h-0.5 w-6 rounded-full bg-black"></div>
-            )}
-          </div>
-          <div className="group flex flex-col items-center">
-            <Link href="/jobs" className="flex flex-col items-center">
-              <BsSuitcaseLgFill
-                className={`h-6 w-6 ${
-                  pathname === '/jobs' ? 'text-gray-800' : 'text-gray-500'
-                } transition-colors group-hover:text-gray-800`}
-              />
-              <span
-                className={`text-sm ${
-                  pathname === '/jobs'
-                    ? 'font-semibold text-gray-800'
-                    : 'text-gray-500'
-                } transition-colors group-hover:text-gray-800`}
-              >
-                Jobs
-              </span>
-            </Link>
-            {pathname === '/jobs' && (
-              <div className="mt-1 h-0.5 w-6 rounded-full bg-black"></div>
-            )}
-          </div>
+          {[
+            {
+              path: '/feeds',
+              icon: <IoHome className="h-6 w-6" />,
+              label: 'Home',
+            },
+            {
+              path: '/my-network',
+              icon: <BsFillPeopleFill className="h-6 w-6" />,
+              label: 'My Network',
+            },
+            {
+              path: '/jobs',
+              icon: <BsSuitcaseLgFill className="h-6 w-6" />,
+              label: 'Jobs',
+            },
+          ].map(({ path, icon, label }) => {
+            const isActive = pathname === path;
+            return (
+              <div key={path} className="group flex flex-col items-center">
+                <Link href={path} className="flex flex-col items-center">
+                  {React.cloneElement(icon, {
+                    className: `${icon.props.className} ${
+                      isActive ? 'text-gray-800' : 'text-gray-500'
+                    } transition-colors group-hover:text-gray-800`,
+                  })}
+                  <span
+                    className={`text-sm ${
+                      isActive ? 'font-semibold text-gray-800' : 'text-gray-500'
+                    } transition-colors group-hover:text-gray-800`}
+                  >
+                    {label}
+                  </span>
+                </Link>
+                {isActive && (
+                  <div className="mt-1 h-0.5 w-6 rounded-full bg-black"></div>
+                )}
+              </div>
+            );
+          })}
+
           <div className="flex flex-col items-center">
-            {decodedToken?.avatar ? (
+            {user?.avatar ? (
               <Image
-                src={decodedToken.avatar}
-                alt={`${decodedToken.name}'s avatar`}
+                src={user.avatar}
+                alt={`${user.name}'s avatar`}
                 width={40}
                 height={40}
                 className="rounded-full object-cover"
               />
             ) : (
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-300 font-semibold text-white">
-                {decodedToken?.name?.charAt(0).toUpperCase() || 'U'}
+                {user?.name?.charAt(0).toUpperCase() || 'U'}
               </div>
             )}
             <p className="flex items-center text-sm text-gray-400 hover:cursor-pointer">

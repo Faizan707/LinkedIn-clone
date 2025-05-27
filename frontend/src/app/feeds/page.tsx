@@ -1,14 +1,11 @@
-
-
-
+import Post from './_components/Post';
 
 function Feeds() {
-
-   
-  return <>
-  
-  
-  </>;
+  return (
+    <>
+      <Post />
+    </>
+  );
 }
 
 export default Feeds;
