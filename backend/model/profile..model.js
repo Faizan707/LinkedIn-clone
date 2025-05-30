@@ -6,6 +6,7 @@ const profileSchema = new mongoose.Schema({
     ref: 'User', 
     required: true,
   },
+  coverImg:{type:String},
   bio: {
     type: String,
   },
