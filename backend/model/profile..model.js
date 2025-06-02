@@ -3,10 +3,10 @@ import mongoose from 'mongoose';
 const profileSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User', 
+    ref: 'User',
     required: true,
   },
-  coverImg:{type:String},
+  coverImg: { type: String },
   bio: {
     type: String,
   },
@@ -39,13 +39,7 @@ const profileSchema = new mongoose.Schema({
     },
   ],
   skills: [String],
-  social: {
-    linkedin: String,
-    github: String,
-    twitter: String,
-    facebook: String,
-    instagram: String,
-  },
+
   createdAt: {
     type: Date,
     default: Date.now,

@@ -1,38 +1,34 @@
-import Profile from '../model/profile.model.js';
 import cloudinary from '../config/cloudinary.js';
-
+import Profile from '../model/profile..model.js';
 export const createProfile = async (req, res) => {
   try {
     const {
       userId,
-      coverImage,
+      coverImg,
       bio,
       location,
       website,
-      experience,
-      education,
       skills,
-      social,
+      education,
+      experience,
     } = req.body;
 
     if (!userId) {
       return res.status(400).json({ message: 'userId is required' });
     }
-
-    const uploadedImage = await cloudinary.uploader.upload(coverImage, {
-      folder: 'faizan',
+    const UploadImage = await cloudinary.uploader.upload(coverImg, {
+      folder: 'faizan/Cover Images',
     });
 
     const profile = new Profile({
       user: userId,
-      coverImage: uploadedImage.secure_url,
+      coverImg: UploadImage.secure_url(),
       bio,
       location,
       website,
-      experience,
-      education,
       skills,
-      social,
+      education,
+      experience,
     });
 
     await profile.save();

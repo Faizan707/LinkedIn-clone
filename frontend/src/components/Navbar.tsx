@@ -11,12 +11,19 @@ import Image from 'next/image';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import { DecodedTokenType } from '@/lib/types';
 import { useUserStore } from '@/store/useUserStore';
-
+import ProfileToggle from '@/app/profile/_components/ProfileToggle';
 function Navbar() {
   const { user, setUser } = useUserStore();
-
+  const [toggle, setToggle] = useState(false);
   const pathname = usePathname();
 
+  const handleToggle = () => {
+    setToggle(prev => !prev);
+  };
+
+  useEffect(() => {
+    console.log('Updated toggle:', toggle);
+  }, [toggle]);
   const getToken = () => {
     const token = getCookie('token') as string | undefined;
     if (token) {
@@ -96,7 +103,7 @@ function Navbar() {
             );
           })}
 
-          <div className="flex flex-col items-center">
+          <div className="relative flex flex-col items-center">
             {user?.avatar ? (
               <Image
                 src={user.avatar}
@@ -110,9 +117,13 @@ function Navbar() {
                 {user?.name?.charAt(0).toUpperCase() || 'U'}
               </div>
             )}
-            <p className="flex items-center text-sm text-gray-400 hover:cursor-pointer">
+            <p
+              className="flex items-center text-sm text-gray-400 hover:cursor-pointer"
+              onClick={handleToggle}
+            >
               Me <IoMdArrowDropdown />
             </p>
+            {toggle && <ProfileToggle />}
           </div>
         </div>
       </div>

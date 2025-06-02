@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import { dbConnection } from './config/db.js';
 import authRoutes from './routes/auth.js';
+import profileRoutes from './routes/profile.js';
 import configurePassport from './config/passport.js';
 import passport from 'passport';
 import session from 'express-session';
@@ -26,6 +27,7 @@ app.use(passport.initialize());
 configurePassport(passport);
 
 app.use('/api/auth', authRoutes);
+app.use('/api', profileRoutes);
 
 const PORT = process.env.PORT || 5000;
 
